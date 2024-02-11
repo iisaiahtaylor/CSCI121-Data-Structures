@@ -1,0 +1,176 @@
+import java.util.*;
+
+class PizzaOrder {
+    String name;
+    double price;
+
+    PizzaOrder(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+}
+
+class Sandwich {
+    String size;
+    double price;
+
+    Sandwich(String size, double price) {
+        this.size = size;
+        this.price = price;
+    }
+}
+
+public class BigYStore {
+    private Map<String, PizzaOrder> pizzaMenu;
+    private Map<String, Sandwich> sandwichMenu;
+    private Scanner scanner;
+
+    public BigYStore() {
+        pizzaMenu = new HashMap<>();
+        pizzaMenu.put("One Topping Pizza", new PizzaOrder("One Topping Pizza", 8));
+        pizzaMenu.put("Two Topping Pizza", new PizzaOrder("Two Topping Pizza", 10));
+        pizzaMenu.put("Three Topping Pizza", new PizzaOrder("Three Topping Pizza", 12));
+
+        sandwichMenu = new HashMap<>();
+        sandwichMenu.put("Small", new Sandwich("Small", 5));
+        sandwichMenu.put("Medium", new Sandwich("Medium", 10));
+        sandwichMenu.put("Large", new Sandwich("Large", 15));
+        sandwichMenu.put("Super", new Sandwich("Super", 20));
+
+        scanner = new Scanner(System.in);
+    }
+
+    public double calculatePizzaPrice(String pizzaName, int numToppings) {
+        PizzaOrder pizza = pizzaMenu.get(pizzaName);
+        if (pizza == null)
+            return -1; // Indicate invalid pizza name
+        double additionalCharge = numToppings * 0.5; // Additional charge for toppings
+        return pizza.price + additionalCharge;
+    }
+
+    public double calculateSandwichPrice(String size, int numToppings) {
+        Sandwich sandwich = sandwichMenu.get(size);
+        if (sandwich == null)
+            return -1; // Indicate invalid sandwich size
+        double additionalCharge = numToppings * 0.5; // Additional charge for toppings
+        return sandwich.price + additionalCharge;
+    }
+
+    public void displayToppingsMenu() {
+        System.out.println("Available toppings:");
+        System.out.println("1. Pepperoni");
+        System.out.println("2. Bacon");
+        System.out.println("3. Pineapple");
+        System.out.println("4. Ham");
+        System.out.println("5. Jalapeno");
+        System.out.println("6. Grilled Chicken");
+        System.out.println("7. Breaded Chicken");
+        System.out.println("8. Sausage");
+        System.out.println("9. Salami");
+        System.out.println("10. Green Pepper");
+        System.out.println("11. Olives");
+        System.out.println("12. Onion");
+        System.out.println("13. Scallion");
+        System.out.println("14. Mushrooms");
+    }
+
+    public static void main(String[] args) {
+        BigYStore store = new BigYStore();
+        Scanner scanner = new Scanner(System.in);
+        double totalCost = 0;
+
+        System.out.println("Welcome to BigY Store!");
+
+        while (true) {
+            System.out.println("\nChoose an option:");
+            System.out.println("1. Order Pizza");
+            System.out.println("2. Order Sandwich");
+            System.out.println("3. View Total Cost");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.println("\n===== Pizza Menu =====");
+                    System.out.println("1. One Topping Pizza - $8.00");
+                    System.out.println("2. Two Topping Pizza - $10.00");
+                    System.out.println("3. Three Topping Pizza - $12.00");
+                    System.out.print("Enter your choice: ");
+                    int pizzaOption = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    System.out.print("Enter the number of toppings (Max 3): ");
+                    int numToppings = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    store.displayToppingsMenu();
+                    System.out.print("Enter the toppings (separated by commas): ");
+                    String toppingsInput = scanner.nextLine();
+                    String[] toppings = toppingsInput.split(",");
+
+                    // Calculate pizza price
+                    String pizzaName = "";
+                    if (pizzaOption == 1)
+                        pizzaName = "One Topping Pizza";
+                    else if (pizzaOption == 2)
+                        pizzaName = "Two Topping Pizza";
+                    else if (pizzaOption == 3)
+                        pizzaName = "Three Topping Pizza";
+                    double pizzaPrice = store.calculatePizzaPrice(pizzaName, numToppings);
+                    totalCost += pizzaPrice;
+                    System.out.println("\nThank you for ordering " + pizzaName + " with " + numToppings + " topping(s)!");
+                    System.out.println("Your total is: $" + pizzaPrice);
+                    break;
+
+                case 2:
+                    System.out.println("\n===== Sandwich Menu =====");
+                    System.out.println("1. Small - $5.00");
+                    System.out.println("2. Medium - $10.00");
+                    System.out.println("3. Large - $15.00");
+                    System.out.println("4. Super - $20.00");
+                    System.out.print("Enter your choice: ");
+                    int sandwichOption = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    System.out.print("Enter the number of toppings (Max 3): ");
+                    numToppings = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    store.displayToppingsMenu();
+                    System.out.print("Enter the toppings (separated by commas): ");
+                    toppingsInput = scanner.nextLine();
+                    toppings = toppingsInput.split(",");
+
+                    // Calculate sandwich price
+                    String size = "";
+                    if (sandwichOption == 1)
+                        size = "Small";
+                    else if (sandwichOption == 2)
+                        size = "Medium";
+                    else if (sandwichOption == 3)
+                        size = "Large";
+                    else if (sandwichOption == 4)
+                        size = "Super";
+                    double sandwichPrice = store.calculateSandwichPrice(size, numToppings);
+                    totalCost += sandwichPrice;
+                    System.out.println("\nThank you for ordering a " + size + " sandwich with " + numToppings + " topping(s)!");
+                    System.out.println("Your total is: $" + sandwichPrice);
+                    break;
+
+                case 3:
+                    System.out.println("\n===== Total Cost =====");
+                    System.out.println("Total Cost: $" + totalCost);
+                    break;
+
+                case 4:
+                    System.out.println("\nThank you for visiting BigY Store! Have a great day!");
+                    return;
+
+                default:
+                    System.out.println("\nInvalid choice. Please try again.");
+            }
+        }
+    }
+}
