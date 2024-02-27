@@ -1,0 +1,86 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class UseDinnerParty {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
+        });
+    }
+
+    private static void createAndShowGUI() {
+        JFrame frame = new JFrame("Dinner Party Planner");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.WHITE); // Set panel background color
+        frame.getContentPane().add(panel);
+
+        JLabel partyGuestsLabel = new JLabel("Enter number of guests for the party: ");
+        partyGuestsLabel.setForeground(Color.PURPLE); // Set label text color
+        JTextField partyGuestsField = new JTextField(10);
+        JLabel dinnerGuestsLabel = new JLabel("Enter number of guests for the dinner party: ");
+        dinnerGuestsLabel.setForeground(Color.PINK); // Set label text color
+        JTextField dinnerGuestsField = new JTextField(10);
+        JLabel dinnerChoiceLabel = new JLabel("Enter the menu option -- 1 for chicken or 2 for Vegi: ");
+        dinnerChoiceLabel.setForeground(Color.BLUE); // Set label text color
+        JTextField dinnerChoiceField = new JTextField(10);
+        JButton submitButton = new JButton("Submit");
+        submitButton.setBackground(Color.GREEN); // Set button background color
+        submitButton.setForeground(Color.WHITE); // Set button text color
+
+        panel.add(partyGuestsLabel);
+        panel.add(partyGuestsField);
+        panel.add(dinnerGuestsLabel);
+        panel.add(dinnerGuestsField);
+        panel.add(dinnerChoiceLabel);
+        panel.add(dinnerChoiceField);
+        panel.add(submitButton);
+
+        submitButton.addActionListener(e -> {
+            int partyGuests = Integer.parseInt(partyGuestsField.getText());
+            int dinnerGuests = Integer.parseInt(dinnerGuestsField.getText());
+            int dinnerChoice = Integer.parseInt(dinnerChoiceField.getText());
+
+            Party party = new Party("Backyard", partyGuests);
+            DinnerParty dinnerParty = new DinnerParty("Restaurant", dinnerGuests, dinnerChoice);
+
+            JOptionPane.showMessageDialog(frame,
+                    "Party: " + party.getGuestCount() + " guests\n" +
+                            "Dinner Party: " + dinnerParty.getGuestCount() + " guests\n" +
+                            "Menu option: " + dinnerParty.getDinnerChoice(),
+                    "Party Details", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    }
+}
+
+class Party {
+    private int guestCount;
+
+    public Party(String location, int guestCount) {
+        this.guestCount = guestCount;
+    }
+
+    public int getGuestCount() {
+        return guestCount;
+    }
+}
+
+class DinnerParty extends Party {
+    private int dinnerChoice;
+
+    public DinnerParty(String location, int guestCount, int dinnerChoice) {
+        super(location, guestCount);
+        this.dinnerChoice = dinnerChoice;
+    }
+
+    public int getDinnerChoice() {
+        return dinnerChoice;
+    }
+}
