@@ -1,0 +1,131 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+class Item {
+    private int id;
+    private String name;
+    private double price;
+
+    public Item(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+
+class ItemOrder {
+    private Item item;
+    private int quantity;
+
+    public ItemOrder(Item item, int quantity) {
+        this.item = item;
+        this.quantity = quantity;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getTotalPrice() {
+        int discountedQuantity = quantity - (quantity / 3); // Calculate the quantity after discount
+        return item.getPrice() * discountedQuantity;
+    }
+}
+class ShoppingCart {
+    private ArrayList<ItemOrder> orders;
+
+    public ShoppingCart() {
+        orders = new ArrayList<>();
+    }
+
+    public void addItemOrder(ItemOrder itemOrder) {
+        orders.add(itemOrder);
+    }
+
+    public void removeItemOrder(ItemOrder itemOrder) {
+        orders.remove(itemOrder);
+    }
+
+    public ItemOrder searchItemOrder(int itemId) {
+        for (ItemOrder order : orders) {
+            if (order.getItem().getId() == itemId) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public double getTotalPrice() {
+        double totalPrice = 0;
+        for (ItemOrder order : orders) {
+            totalPrice += order.getTotalPrice();
+        }
+        return totalPrice;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Create items
+        HashMap<Integer, Item> items = new HashMap<>();
+        items.put(1, new Item(1, "Tissues", 3.0));
+        items.put(2, new Item(2, "Handkerchiefs", 5.0));
+        items.put(3, new Item(3, "Facial tissues", 3.0));
+        items.put(4, new Item(4, "Disposable wipes", 6.0));
+        items.put(5, new Item(5, "Cotton pads", 4.0));
+        items.put(6, new Item(6, "Baby wipes", 4.0));
+        items.put(7, new Item(7, "Cleaning wipes", 7.0));
+        items.put(8, new Item(8, "Wet wipes", 4.0));
+        items.put(9, new Item(9, "Makeup remover wipes", 5.0));
+        items.put(10, new Item(10, "Pre-moistened towelettes", 7.0));
+        items.put(11, new Item(11, "Cloth wipes", 10.0));
+
+        // Create a shopping cart
+        ShoppingCart cart = new ShoppingCart();
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Display items
+        System.out.println("Available items:");
+        for (int itemId : items.keySet()) {
+            Item item = items.get(itemId);
+            System.out.println(itemId + ". " + item.getName() + " - $" + item.getPrice());
+        }
+
+        // Prompt user for selections
+        System.out.println("Enter the item IDs along with the quantities (e.g., '1 2 3' for 1 Tissue, 2 Handkerchiefs, and 3 Facial tissues):");
+        String input = scanner.nextLine();
+        String[] selections = input.split(" ");
+        for (String selection : selections) {
+            int itemId = Integer.parseInt(selection);
+            System.out.print("Enter quantity for item " + itemId + ": ");
+            int quantity = scanner.nextInt();
+            if (quantity > 0 && items.containsKey(itemId)) {
+                cart.addItemOrder(new ItemOrder(items.get(itemId), quantity));
+            }
+        }
+
+        // Calculate total price
+        double totalPrice = cart.getTotalPrice();
+        System.out.println("Total Price: $" + totalPrice);
+
+        scanner.close();
+    }
+}
