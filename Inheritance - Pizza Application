@@ -1,0 +1,227 @@
+import java.util.Arrays;
+
+public class Pizza {
+    private String[] toppings;
+    private double price;
+
+    public Pizza(String[] toppings, int numberOfToppings) {
+        this.toppings = new String[numberOfToppings];
+        for (int i = 0; i < numberOfToppings; i++) {
+            this.toppings[i] = toppings[i];
+        }
+        calculatePrice();
+    }
+
+    private void calculatePrice() {
+        price = 14 + 2 * toppings.length;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder description = new StringBuilder("Pizza with toppings: ");
+        for (String topping : toppings) {
+            description.append(topping).append(", ");
+        }
+        description.delete(description.length() - 2, description.length()); // Remove last comma and space
+        description.append("\nPrice: $").append(price);
+        return description.toString();
+    }
+}
+
+{
+    private static final String QUIT = "QUIT";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the toppings for your pizza (up to 10), type QUIT to finish:");
+        String[] toppings = new String[10];
+        int numberOfToppings = 0;
+        while (numberOfToppings < 10) {
+            String topping = scanner.nextLine();
+            if (topping.equalsIgnoreCase(QUIT)) {
+                break;
+            }
+            toppings[numberOfToppings++] = topping;
+        }
+
+        System.out.println("Is the pizza to be delivered? (yes/no):");
+        String deliveryChoice = scanner.nextLine();
+        if (deliveryChoice.equalsIgnoreCase("yes")) {
+            System.out.println("Enter delivery address:");
+            String deliveryAddress = scanner.nextLine();
+            DeliveryPizza deliveryPizza = new DeliveryPizza(Arrays.copyOf(toppings, numberOfToppings), deliveryAddress, numberOfToppings);
+            System.out.println(deliveryPizza);
+        } else {
+            Pizza pizza = new Pizza(Arrays.copyOf(toppings, numberOfToppings), numberOfToppings);
+            System.out.println(pizza);
+        }
+
+        scanner.close();
+    }
+}
+
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class DemoPizza {
+    private static final String QUIT = "QUIT";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the toppings for your pizza (up to 10), type QUIT to finish:");
+        String[] toppings = new String[10];
+        int numberOfToppings = 0;
+        while (numberOfToppings < 10) {
+            String topping = scanner.nextLine();
+            if (topping.equalsIgnoreCase(QUIT)) {
+                break;
+            }
+            toppings[numberOfToppings++] = topping;
+        }
+
+        System.out.println("Is the pizza to be delivered? (yes/no):");
+        String deliveryChoice = scanner.nextLine();
+        if (deliveryChoice.equalsIgnoreCase("yes")) {
+            System.out.println("Enter delivery address:");
+            String deliveryAddress = scanner.nextLine();
+            DeliveryPizza deliveryPizza = new DeliveryPizza(Arrays.copyOf(toppings, numberOfToppings), deliveryAddress, numberOfToppings);
+            System.out.println(deliveryPizza);
+        } else {
+            Pizza pizza = new Pizza(Arrays.copyOf(toppings, numberOfToppings), numberOfToppings);
+            System.out.println(pizza);
+        }
+
+        scanner.close();
+    }
+}
+
+import java.util.Scanner;
+
+public class Rewards {
+    private int totalPoints;
+    private final int pointsPerPizza = 100; // Points earned per pizza
+    private final int discountThreshold = 100; // Points required for a discount (100 points = 10% off)
+
+    public Rewards() {
+        this.totalPoints = 0;
+    }
+
+    public void placeOrder(int numberOfPizzas) {
+        int earnedPoints = numberOfPizzas * pointsPerPizza;
+        totalPoints += earnedPoints;
+        System.out.println("Order placed successfully! Earned " + earnedPoints + " points.");
+    }
+
+    public void checkRewards() {
+        System.out.println("Total points: " + totalPoints);
+        System.out.println("You can redeem " + (totalPoints / discountThreshold) * 10 + "% off your next order.");
+    }
+
+    public void spendPoints() {
+        int discount = totalPoints / discountThreshold * 10; // Calculate discount percentage
+        int pointsSpent = (totalPoints / discountThreshold) * discountThreshold; // Calculate points to spend
+        totalPoints -= pointsSpent; // Deduct spent points
+        System.out.println("Points spent: " + pointsSpent);
+        System.out.println("You received a " + discount + "% discount on your order!");
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to the Rewards Program!");
+        Rewards rewards = new Rewards();
+
+        while (true) {
+            System.out.println("\n1. Place Order\n2. Check Rewards\n3. Spend Points\n4. Exit");
+            System.out.print("Choose an option: ");
+            int option = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    System.out.print("Enter number of pizzas: ");
+                    int numberOfPizzas = scanner.nextInt();
+                    rewards.placeOrder(numberOfPizzas);
+                    break;
+                case 2:
+                    rewards.checkRewards();
+                    break;
+                case 3:
+                    rewards.spendPoints();
+                    break;
+                case 4:
+                    System.out.println("Exiting program. Thank you!");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+}
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class PizzaGUI extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Pizza Order");
+        VBox root = new VBox();
+        Label label = new Label("Welcome to Pizza Ordering System!");
+        root.getChildren().add(label);
+        Scene scene = new Scene(root, 400, 300);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+public class DeliveryPizzaGUI extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+
+    }
+}
+
+public class DemoPizzaGUI extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+
+    }
+}
+
+public class RewardsGUI extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Rewards Program");
+        VBox root = new VBox();
+        Label label = new Label("Welcome to Rewards Program!");
+        root.getChildren().add(label);
+        Scene scene = new Scene(root, 400, 300);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+
